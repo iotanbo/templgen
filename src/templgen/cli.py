@@ -16,8 +16,24 @@ Why does this file exist, and why not put this in __main__?
 """
 import click
 
+import templgen
+
+# from templgen.settings import Settings
+# from templgen.template_processor import TemplateProcessor
+
 
 @click.command()
+@click.option("-t", "--template", default="",
+              help="Specify template name, e.g. '-t cppclassfile'")
+@click.option("-c", "--classnames", default="",
+              help="Specify comma-separated C++ class names for C++ templates, e.g. -c 'MyClass1,MyClass2'")
 @click.argument('names', nargs=-1)
-def main(names):
-    click.echo(repr(names))
+def main(names, *, template, classnames):
+    # click.echo(repr(names))
+    if 'version' in names:
+        print(f"templgen version {templgen.__version__}")
+    if template:
+        print(f"Selected template: {template}")
+    if classnames:
+        class_names = classnames.split(',')
+        print(f"Selected class names: {class_names}")

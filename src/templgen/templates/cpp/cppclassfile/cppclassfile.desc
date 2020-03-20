@@ -1,0 +1,4 @@
+class_name=MyClass
+namespace=demo
+
+use_low_case_file_names=True
