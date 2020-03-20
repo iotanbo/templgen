@@ -1,6 +1,9 @@
 *.py[cod]
 __pycache__
 
+
+.python-version
+
 # C extensions
 *.so
 
