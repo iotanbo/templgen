@@ -16,24 +16,58 @@ Why does this file exist, and why not put this in __main__?
 """
 import click
 
+
 import templgen
+from templgen.templgen import Templgen
 
 # from templgen.settings import Settings
 # from templgen.template_processor import TemplateProcessor
+from iotanbo_py_utils import file_utils
 
 
-@click.command()
-@click.option("-t", "--template", default="",
-              help="Specify template name, e.g. '-t cppclassfile'")
-@click.option("-c", "--classnames", default="",
-              help="Specify comma-separated C++ class names for C++ templates, e.g. -c 'MyClass1,MyClass2'")
+@click.group()
+def main():
+    pass
+
+
+@main.command()
+def update():
+    tg = Templgen()
+    tg.ensure_integrity()
+    tg._settings.update_settings_for_path(file_utils.get_user_home_dir())
+    print(tg._settings._parser.items('GENERAL'))
+
+
+@main.command()
 @click.argument('names', nargs=-1)
-def main(names, *, template, classnames):
-    # click.echo(repr(names))
-    if 'version' in names:
-        print(f"templgen version {templgen.__version__}")
-    if template:
-        print(f"Selected template: {template}")
-    if classnames:
-        class_names = classnames.split(',')
-        print(f"Selected class names: {class_names}")
+def get(names):
+    tg = Templgen()
+    tg.ensure_integrity()
+    tg._settings.update_settings_for_path(file_utils.get_user_home_dir())
+    for name in names:
+        print(f"{tg._settings.get(name)[0]}")
+
+# @click.command()
+# @click.argument("update", default="")
+#
+# @click.argument("get", default="")
+# @click.option("-t", "--template", default="",
+#               help="Specify template name, e.g. '-t cppclassfile'")
+# @click.option("-c", "--classnames", default="",
+#               help="Specify comma-separated C++ class names for C++ templates, e.g. -c 'MyClass1,MyClass2'")
+# # @click.argument('names', nargs=-1)
+# @click.version_option()
+# def main(*, update, template, classnames):
+#     # click.echo(repr(names))
+#     # if 'version' in names:
+#     #     print(f"templgen version {templgen.__version__}")
+#     #     exit(0)
+#     tg = Templgen()
+#     tg.ensure_integrity()
+#     if update:
+#         tg._settings.update_settings_for_path(file_utils.get_user_home_dir())
+#     if template:
+#         print(f"Selected template: {template}")
+#     if classnames:
+#         class_names = classnames.split(',')
+#         print(f"Selected class names: {class_names}")
